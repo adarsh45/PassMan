@@ -1,8 +1,15 @@
+import { useState } from "react";
 import { useHistory } from "react-router-dom";
 import { supabase } from "../../client";
+import { FaCopy, FaPen, FaTrash } from "react-icons/fa";
+import { ImCross } from "react-icons/im";
+import { Modal, ModalBody } from "reactstrap";
+import "./recordcard.scss";
 
 const RecordCard = ({ passRecord, update }) => {
   const history = useHistory();
+  const [deleteModal, setDeleteModal] = useState(false);
+  const toggleDeleteModal = () => setDeleteModal((prev) => !prev);
 
   const handleCopy = () => {
     //   TODO: decrypt password here & copy it to clipboard
@@ -23,17 +30,47 @@ const RecordCard = ({ passRecord, update }) => {
 
     if (!error) {
       console.log(data);
-      update();
     } else {
       console.log(error);
     }
+    update();
+    toggleDeleteModal();
   };
   return (
-    <div>
-      <span>{passRecord.title}</span>
-      <button onClick={handleCopy}>copy password</button>
-      <button onClick={handleEdit}>edit record</button>
-      <button onClick={handleDelete}>delete record</button>
+    <div className="record-card">
+      <span className="title">{passRecord.title}</span>
+      <div className="div-btns">
+        <button className="icon-btn" onClick={handleCopy}>
+          <FaCopy />
+        </button>
+        <button className="icon-btn" onClick={handleEdit}>
+          <FaPen />
+        </button>
+        <button className="icon-btn" onClick={toggleDeleteModal}>
+          <FaTrash />
+        </button>
+      </div>
+
+      <>
+        <Modal
+          isOpen={deleteModal}
+          toggle={toggleDeleteModal}
+          className="delete-modal"
+          centered
+        >
+          <ModalBody>
+            <div>{`Are you sure want to delete ${passRecord.title} ?`}</div>
+            <div className="btns-div">
+              <button className="icon-btn" id="danger" onClick={handleDelete}>
+                <FaTrash />
+              </button>
+              <button className="icon-btn" onClick={toggleDeleteModal}>
+                <ImCross />
+              </button>
+            </div>
+          </ModalBody>
+        </Modal>
+      </>
     </div>
   );
 };

@@ -2,8 +2,6 @@ import { useState } from "react";
 import { useHistory } from "react-router-dom";
 import { signInWithGithub, signout } from "./helper/authCalls";
 
-// const crypto = require("crypto-js");
-
 const Signin = () => {
   const [loading, setLoading] = useState(false);
   const history = useHistory();

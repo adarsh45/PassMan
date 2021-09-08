@@ -1,0 +1,81 @@
+.record-page {
+  width: 30% !important;
+  margin: auto !important;
+
+  .heading,
+  .sub-heading {
+    text-align: center !important;
+  }
+
+  .form-row {
+    display: flex !important;
+    justify-content: flex-start !important;
+    align-items: flex-start !important;
+    flex-direction: column !important;
+
+    label {
+      margin: 0.4em 0px;
+      padding: 0.4em 0px;
+      font-size: 0.8em !important;
+      color: #a5b0af !important;
+    }
+
+    .input-div {
+      position: relative;
+      width: 100% !important;
+    }
+    .input-field {
+      //   width: 100% !important;
+    }
+    .icon {
+      height: 100%;
+      position: absolute;
+      right: 0;
+      padding: 0px 1em;
+      background-color: #fff;
+      svg {
+        height: 100%;
+        fill: #000;
+        cursor: pointer;
+      }
+    }
+
+    input,
+    textarea {
+      font-size: 1.4em;
+      padding: 0.4em;
+      width: 100% !important;
+      box-sizing: border-box !important;
+      border: none;
+      border-radius: 0.25rem;
+    }
+    input:focus-visible,
+    textarea:focus-visible {
+      outline: none !important;
+    }
+  }
+
+  .button-row {
+    width: 100% !important;
+    display: flex !important;
+    justify-content: space-around;
+    align-items: center;
+    margin: 1.4em 0px;
+
+    button {
+      width: 50% !important;
+      padding: 0.6em 0px;
+      margin: 0px !important;
+      font-size: 1.2em !important;
+    }
+    button:hover {
+      box-shadow: 0px 0px 6px #fff;
+    }
+    button:first-of-type {
+      margin-right: 0.6em !important;
+    }
+    #cancel {
+      background-color: rgb(96, 96, 96) !important;
+    }
+  }
+}

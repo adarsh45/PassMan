@@ -1,6 +1,9 @@
 import { useEffect, useState } from "react";
 import { useHistory, useLocation } from "react-router-dom";
 import { supabase } from "../../client";
+import { FaEyeSlash, FaEye } from "react-icons/fa";
+import "./recordpage.scss";
+const crypto = require("crypto-js");
 
 const emptyRecord = {
   title: "",
@@ -22,10 +25,28 @@ const Record = () => {
   }, [location]);
 
   const [record, setRecord] = useState(emptyRecord);
-
   const [isUpdate, setIsUpdate] = useState(false);
+  const [passVisible, setPassVisible] = useState(false);
+  const [isEncrypted, setIsEncrypted] = useState(false);
+  const togglePassVisibility = () => setPassVisible(!passVisible);
 
   const { title, website_url, username, pass, note } = record;
+
+  useEffect(() => {
+    let newPass = "";
+    if (!pass || !isUpdate) return;
+    if (passVisible) {
+      // Decrypt
+      const bytes = crypto.AES.decrypt(pass, supabase.auth.user().id);
+      newPass = bytes.toString(crypto.enc.Utf8);
+      setIsEncrypted(false);
+    } else {
+      // encrypt
+      newPass = crypto.AES.encrypt(pass, supabase.auth.user().id).toString();
+      setIsEncrypted(true);
+    }
+    setRecord({ ...record, pass: newPass });
+  }, [passVisible]);
 
   const handleChange = (e) => {
     const name = e.target.name;
@@ -44,16 +65,19 @@ const Record = () => {
 
     // TODO: add empty check for each input
     // TODO: do password encryption here
-    if (pass) {
-      //   // Encrypt
-      //   const ciphertext = crypto.AES.encrypt("mypassword", "SECRETKEY").toString();
-      //   console.log("Encrypted Text: ", ciphertext);
-      //   // Decrypt
-      //   var bytes = crypto.AES.decrypt(ciphertext, "secretkey".toUpperCase());
-      //   var originalText = bytes.toString(crypto.enc.Utf8);
-      //   console.log("Original Text: ", originalText);
-    }
-
+    let mData, mError, encryptedPass;
+    if (pass && pass.length > 6) {
+      if (!isEncrypted) {
+        // Encrypt
+        encryptedPass = crypto.AES.encrypt(
+          pass,
+          supabase.auth.user().id
+        ).toString();
+        setRecord({ ...record, pass: encryptedPass });
+      } else {
+        encryptedPass = pass;
+      }
+    } else return;
     if (isUpdate) {
       const { id } = record;
       if (id) {
@@ -63,101 +87,117 @@ const Record = () => {
             title,
             website_url,
             username,
-            pass,
+            pass: encryptedPass,
             note,
           })
           .eq("id", id);
 
-        if (!error) {
-          console.log(data);
-        } else {
-          console.log(error);
-        }
+        mData = data;
+        mError = error;
       } else {
         console.log("no id found!");
       }
     } else {
       const { data, error } = await supabase.from("PassRecord").insert([
         {
-          ...record,
+          title,
+          website_url,
+          username,
+          pass: encryptedPass,
+          note,
           user_id: supabase.auth.user().id,
         },
       ]);
-      if (!error) {
-        console.log(data);
-      } else {
-        console.log(error);
-      }
+      mData = data;
+      mError = error;
     }
     // TODO: handle errors
+    if (!mError) {
+      console.log("DATA: ", mData);
+      history.goBack();
+    } else {
+      console.log("ERROR: ", mError);
+    }
   };
 
   return (
-    <div>
-      <h1>PassMan</h1>
-      <p>{isUpdate ? "Update PassMan Record" : "Add New PassMan Record"}</p>
+    <div className="record-page">
+      <h1 className="heading">
+        Pass<span className="color-green">Man</span>
+      </h1>
+      <p className="sub-heading">
+        {isUpdate ? "Update PassMan Record" : "Add New PassMan Record"}
+      </p>
       <form onSubmit={handleSubmit}>
-        <div>
+        <div className="form-row">
           <label>Title</label>
           <input
             onChange={handleChange}
             value={title}
             type="text"
-            placeholder="Title or Name of Website"
             name="title"
           />
         </div>
-        <div>
+        <div className="form-row">
           <label>Website URL</label>
           <input
             onChange={handleChange}
             value={website_url}
             type="text"
-            placeholder="Website URL"
             name="website_url"
           />
         </div>
-        <div>
+        <div className="form-row">
           <label>Username / Email</label>
           <input
             onChange={handleChange}
             value={username}
             type="text"
-            placeholder="Username or Email"
             name="username"
           />
         </div>
-        <div>
+        <div className="form-row">
           <label>Password</label>
-          <input
-            onChange={handleChange}
-            value={pass}
-            type="password"
-            placeholder="Password you'd like to save (will be encrypted immediately)"
-            name="pass"
-          />
+          <div className="input-div">
+            <input
+              className="input-field"
+              onChange={handleChange}
+              value={pass}
+              type={passVisible ? "text" : "password"}
+              name="pass"
+              id="pass-field"
+            />
+            <span className="icon">
+              {passVisible ? (
+                <FaEye onClick={togglePassVisibility} />
+              ) : (
+                <FaEyeSlash onClick={togglePassVisibility} />
+              )}
+            </span>
+          </div>
         </div>
-        <div>
+        <div className="form-row">
           <label>Note</label>
           <textarea
             onChange={handleChange}
             value={note}
             type="text"
-            placeholder="Anything you want to note here"
             name="note"
           />
         </div>
-        <input
-          type="submit"
-          value={isUpdate ? "Update" : "Save"}
-          name="submit"
-        />
-        <input
-          type="button"
-          onClick={handleCancel}
-          value="Cancel"
-          name="cancel"
-        />
+        <div className="button-row">
+          <button type="submit" name="submit">
+            {isUpdate ? "Update" : "Save"}
+          </button>
+          <button
+            type="cancel"
+            id="cancel"
+            onClick={handleCancel}
+            name="cancel"
+          >
+            Cancel
+          </button>
+        </div>
       </form>
     </div>
   );

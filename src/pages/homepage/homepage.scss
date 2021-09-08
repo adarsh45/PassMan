@@ -1,0 +1,30 @@
+.home-page {
+  width: 30% !important;
+  margin: auto !important;
+
+  .add-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 100% !important;
+    width: 72px !important;
+    height: 72px !important;
+    font-size: 1.4em !important;
+    margin-right: 0px !important;
+    margin-left: auto !important;
+    a {
+      text-decoration: none !important;
+      color: #fff !important;
+      margin: 0px !important;
+      padding: 0px !important;
+      line-height: 0px !important;
+    }
+  }
+  .add-btn:hover {
+    box-shadow: 0px 0px 4px #fff;
+    svg {
+      transform: scale(1.15);
+      transition-duration: 300ms;
+    }
+  }
+}
