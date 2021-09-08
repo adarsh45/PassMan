@@ -5,15 +5,6 @@ import { signInWithGithub, signout } from "./helper/authCalls";
 // const crypto = require("crypto-js");
 
 const Signin = () => {
-  //   // Encrypt
-  //   const ciphertext = crypto.AES.encrypt("mypassword", "SECRETKEY").toString();
-  //   console.log("Encrypted Text: ", ciphertext);
-
-  //   // Decrypt
-  //   var bytes = crypto.AES.decrypt(ciphertext, "secretkey".toUpperCase());
-  //   var originalText = bytes.toString(crypto.enc.Utf8);
-  //   console.log("Original Text: ", originalText);
-
   const [loading, setLoading] = useState(false);
   const history = useHistory();
 
