@@ -10,13 +10,7 @@ import {
 } from "react-icons/fa";
 import { FiLink2 } from "react-icons/fi";
 import { RiLockPasswordFill } from "react-icons/ri";
-import {
-  Input,
-  InputGroup,
-  InputGroupAddon,
-  Modal,
-  ModalBody,
-} from "reactstrap";
+import { Input, InputGroup, InputGroupAddon } from "reactstrap";
 import "./recordpage.scss";
 import GenerateModal from "./GenerateModal";
 const crypto = require("crypto-js");
@@ -35,8 +29,8 @@ const Record = () => {
 
   useEffect(() => {
     if (location.state) {
-      setRecord(location.state);
       setIsUpdate(true);
+      setRecord(location.state);
     }
   }, [location]);
 
@@ -50,6 +44,10 @@ const Record = () => {
   const togglePassVisibility = () => setPassVisible(!passVisible);
 
   const { title, website_url, username, pass, note } = record;
+
+  const setPassword = (passd) => {
+    setRecord({ ...record, pass: passd });
+  };
 
   useEffect(() => {
     let newPass = "";
@@ -66,6 +64,8 @@ const Record = () => {
     }
     setRecord({ ...record, pass: newPass });
   }, [passVisible]);
+
+  const copyToClipboard = () => {};
 
   const handleChange = (e) => {
     const name = e.target.name;
@@ -212,6 +212,9 @@ const Record = () => {
               className="input"
             />
             <InputGroupAddon addonType="append" className="eye-icon-div">
+              <button onClick={copyToClipboard} className="copy-btn">
+                Copy
+              </button>
               {passVisible ? (
                 <FaEye onClick={togglePassVisibility} />
               ) : (
@@ -260,6 +263,7 @@ const Record = () => {
       <GenerateModal
         generateModal={generateModal}
         toggleGenerateModal={toggleGenerateModal}
+        setPassword={setPassword}
       />
     </div>
   );

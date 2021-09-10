@@ -1,15 +1,29 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Modal, ModalBody } from "reactstrap";
 import { FiRefreshCw } from "react-icons/fi";
 import CircleIconButton from "../../components/CircleIconButton";
 import "./modal.scss";
 
-const GenerateModal = ({ generateModal, toggleGenerateModal }) => {
-  const [generatedPass, setGeneratedPass] = useState("loremipsum69");
+const generator = require("generate-password");
+
+const GenerateModal = ({ generateModal, toggleGenerateModal, setPassword }) => {
+  const [generatedPass, setGeneratedPass] = useState("");
   const [length, setLength] = useState(10);
   const [isDigits, setIsDigits] = useState(true);
-  const [isLetters, setIsLetters] = useState(true);
   const [isSymbols, setIsSymbols] = useState(false);
+
+  useEffect(() => {
+    generateThePassword();
+  }, []);
+
+  const generateThePassword = () => {
+    let password = generator.generate({
+      length,
+      numbers: isDigits,
+      symbols: isSymbols,
+    });
+    setGeneratedPass(password);
+  };
 
   return (
     <Modal
@@ -21,7 +35,7 @@ const GenerateModal = ({ generateModal, toggleGenerateModal }) => {
       <ModalBody>
         <div className="password-div">
           <span className="pass-text">{generatedPass}</span>
-          <CircleIconButton Icon={FiRefreshCw} />
+          <CircleIconButton Icon={FiRefreshCw} onClick={generateThePassword} />
         </div>
         <div className="generator">
           <div className="length-div">
@@ -50,17 +64,6 @@ const GenerateModal = ({ generateModal, toggleGenerateModal }) => {
             </label>
           </div>
           <div className="generate-row">
-            <span>Letters (e.g. Aa) </span>
-            <label className="switch">
-              <input
-                type="checkbox"
-                checked={isLetters}
-                onChange={(e) => setIsLetters(e.target.checked)}
-              />
-              <span class="slider round"></span>
-            </label>
-          </div>
-          <div className="generate-row">
             <span>Include Symbols (e.g. @-#)</span>
             <label className="switch">
               <input
@@ -70,6 +73,19 @@ const GenerateModal = ({ generateModal, toggleGenerateModal }) => {
               />
               <span class="slider round"></span>
             </label>
+          </div>
+          <div className="buttons-div">
+            <button
+              onClick={() => {
+                setPassword(generatedPass);
+                toggleGenerateModal();
+              }}
+            >
+              Use this Password
+            </button>
+            <button id="cancel" onClick={toggleGenerateModal}>
+              Close
+            </button>
           </div>
         </div>
       </ModalBody>
