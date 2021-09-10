@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import { useHistory } from "react-router-dom";
 import { supabase } from "../../client";
 
 const getUserData = (userData) => {
@@ -21,6 +22,7 @@ export const AuthProvider = () => {
             JSON.stringify(getUserData(session.user))
           )
         : localStorage.removeItem("passmanuser");
+      // session && session.user && history.push("/home");
     });
     return () => unsubscribe();
   }, []);

@@ -1,12 +1,16 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import { supabase } from "../../client";
 import RecordCard from "./RecordCard";
 import { FaPlus } from "react-icons/fa";
-import { ReactComponent as IndianFarmer } from "../../assets/indian_farmer_1.svg";
+import { ReactComponent as IndianFarmer } from "../../assets/indian_farmer.svg";
+import { FiLogOut } from "react-icons/fi";
 import "./homepage.scss";
+import { isAuthenticated, signout } from "../../auth/helper/authCalls";
 
 const HomePage = () => {
+  const history = useHistory();
+
   const [records, setRecords] = useState([]);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -33,20 +37,39 @@ const HomePage = () => {
     setLoading(false);
   };
 
+  const handleLogout = () => {
+    signout().then(() => {
+      history.push("/");
+    });
+  };
+
   return (
     <div className="home-page">
+      <div className="profile-div">
+        <span>
+          Hey,{" "}
+          <span className="color-green">
+            {isAuthenticated().fullname.split(" ")[0]}!
+          </span>
+        </span>
+        <span>
+          <FiLogOut onClick={handleLogout} />
+        </span>
+      </div>
       <h1 className="heading">
         Pass<span className="color-green">Man</span>
       </h1>
       {records.length ? (
         <div>
-          {records.map((passRecord) => (
-            <RecordCard
-              key={passRecord.id}
-              passRecord={passRecord}
-              update={readMyRecords}
-            />
-          ))}
+          <div className="records-list">
+            {records.map((passRecord) => (
+              <RecordCard
+                key={passRecord.id}
+                passRecord={passRecord}
+                update={readMyRecords}
+              />
+            ))}
+          </div>
           <button className="add-btn">
             <Link to="/record">
               {" "}

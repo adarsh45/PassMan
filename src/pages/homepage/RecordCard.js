@@ -38,7 +38,14 @@ const RecordCard = ({ passRecord, update }) => {
   };
   return (
     <div className="record-card">
-      <span className="title">{passRecord.title}</span>
+      {/* TODO: urls without http not opening directly (localhost/ appended) */}
+      <a
+        href={passRecord.website_url ? passRecord.website_url : "#"}
+        target="_blank"
+        rel="noreferrer"
+      >
+        <span className="title">{passRecord.title}</span>
+      </a>
       <div className="div-btns">
         <button className="icon-btn" onClick={handleCopy}>
           <FaCopy />

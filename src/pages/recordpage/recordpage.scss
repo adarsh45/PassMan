@@ -1,7 +1,6 @@
 .record-page {
   width: 30% !important;
   margin: auto !important;
-
   .heading,
   .sub-heading {
     text-align: center !important;
@@ -20,38 +19,53 @@
       color: #a5b0af !important;
     }
 
-    .input-div {
-      position: relative;
-      width: 100% !important;
-    }
-    .input-field {
-      //   width: 100% !important;
-    }
-    .icon {
-      height: 100%;
-      position: absolute;
-      right: 0;
-      padding: 0px 1em;
+    .input-group {
       background-color: #fff;
-      svg {
+      border-radius: 0.25rem !important;
+
+      .icon {
+        // fill: #65b67f !important;
         height: 100%;
-        fill: #000;
+        margin: auto 0.6em;
+        path,
+        line {
+          // fill: #65b67f !important;
+          color: #65b67f !important;
+        }
+      }
+      .input {
+        font-size: 1.1em;
+        padding: 0.4em;
+        box-sizing: border-box !important;
+        border: none;
+      }
+      .input:focus {
+        outline: none !important;
+        box-shadow: none !important;
+      }
+
+      .eye-icon-div {
         cursor: pointer;
+        color: #000;
+        display: flex;
+        align-items: center;
+        padding: 0.4em;
       }
     }
+  }
 
-    input,
-    textarea {
-      font-size: 1.4em;
-      padding: 0.4em;
-      width: 100% !important;
-      box-sizing: border-box !important;
-      border: none;
-      border-radius: 0.25rem;
+  .generate-pass-div {
+    text-align: right;
+    // padding: 0px 0px 0px 1em;
+
+    .generate-text {
+      cursor: pointer;
+      color: #65b67f;
+      font-weight: 500;
+      text-transform: uppercase;
     }
-    input:focus-visible,
-    textarea:focus-visible {
-      outline: none !important;
+    .generate-text:hover {
+      text-decoration: underline;
     }
   }
 
@@ -77,5 +91,12 @@
     #cancel {
       background-color: rgb(96, 96, 96) !important;
     }
+  }
+}
+
+.generate-modal {
+  .modal-content {
+    background-color: #fff;
+    color: #000;
   }
 }

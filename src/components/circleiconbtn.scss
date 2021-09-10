@@ -1,0 +1,16 @@
+.icon-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 100% !important;
+  width: 50px !important;
+  height: 50px !important;
+  margin: 0.4em !important;
+}
+.icon-btn:hover {
+  box-shadow: 0px 0px 4px #fff;
+  svg {
+    transform: scale(1.1);
+    transition-duration: 300ms;
+  }
+}

@@ -8,16 +8,16 @@ export const isAuthenticated = () => {
   } else return false;
 };
 
-export const signInWithGithub = async (redirectUrl) => {
+export const signInWithGithub = async () => {
   const promise = new Promise((resolve, reject) => {
     supabase.auth
       .signIn(
         {
           provider: "github",
-        },
-        {
-          redirectTo: redirectUrl,
         }
+        // {
+        //   redirectTo: "https://github.com/",
+        // }
       )
       .then((res) => {
         resolve(res);

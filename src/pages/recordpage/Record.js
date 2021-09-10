@@ -1,8 +1,24 @@
 import { useEffect, useState } from "react";
 import { useHistory, useLocation } from "react-router-dom";
 import { supabase } from "../../client";
-import { FaEyeSlash, FaEye } from "react-icons/fa";
+import {
+  FaEyeSlash,
+  FaEye,
+  FaLastfm,
+  FaUserAlt,
+  FaStickyNote,
+} from "react-icons/fa";
+import { FiLink2 } from "react-icons/fi";
+import { RiLockPasswordFill } from "react-icons/ri";
+import {
+  Input,
+  InputGroup,
+  InputGroupAddon,
+  Modal,
+  ModalBody,
+} from "reactstrap";
 import "./recordpage.scss";
+import GenerateModal from "./GenerateModal";
 const crypto = require("crypto-js");
 
 const emptyRecord = {
@@ -26,8 +42,11 @@ const Record = () => {
 
   const [record, setRecord] = useState(emptyRecord);
   const [isUpdate, setIsUpdate] = useState(false);
-  const [passVisible, setPassVisible] = useState(false);
   const [isEncrypted, setIsEncrypted] = useState(false);
+  const [generateModal, setGenerateModal] = useState(false);
+  const toggleGenerateModal = () => setGenerateModal(!generateModal);
+
+  const [passVisible, setPassVisible] = useState(false);
   const togglePassVisibility = () => setPassVisible(!passVisible);
 
   const { title, website_url, username, pass, note } = record;
@@ -131,59 +150,96 @@ const Record = () => {
       <form onSubmit={handleSubmit}>
         <div className="form-row">
           <label>Title</label>
-          <input
-            onChange={handleChange}
-            value={title}
-            type="text"
-            name="title"
-          />
+          <InputGroup>
+            <InputGroupAddon addonType="prepend">
+              <FaLastfm className="icon" />
+            </InputGroupAddon>
+
+            <Input
+              onChange={handleChange}
+              value={title}
+              type="text"
+              name="title"
+              className="input"
+            />
+          </InputGroup>
         </div>
         <div className="form-row">
           <label>Website URL</label>
-          <input
-            onChange={handleChange}
-            value={website_url}
-            type="text"
-            name="website_url"
-          />
+          <InputGroup>
+            <InputGroupAddon addonType="prepend">
+              <FiLink2 className="icon" />
+            </InputGroupAddon>
+
+            <Input
+              onChange={handleChange}
+              value={website_url}
+              type="text"
+              name="website_url"
+              className="input"
+            />
+          </InputGroup>
         </div>
         <div className="form-row">
           <label>Username / Email</label>
-          <input
-            onChange={handleChange}
-            value={username}
-            type="text"
-            name="username"
-          />
+          <InputGroup>
+            <InputGroupAddon addonType="prepend">
+              <FaUserAlt className="icon" />
+            </InputGroupAddon>
+
+            <Input
+              onChange={handleChange}
+              value={username}
+              type="text"
+              name="username"
+              className="input"
+            />
+          </InputGroup>
         </div>
         <div className="form-row">
           <label>Password</label>
-          <div className="input-div">
-            <input
-              className="input-field"
+          <InputGroup>
+            <InputGroupAddon addonType="prepend">
+              <RiLockPasswordFill className="icon" />
+            </InputGroupAddon>
+
+            <Input
               onChange={handleChange}
               value={pass}
               type={passVisible ? "text" : "password"}
               name="pass"
               id="pass-field"
+              className="input"
             />
-            <span className="icon">
+            <InputGroupAddon addonType="append" className="eye-icon-div">
               {passVisible ? (
                 <FaEye onClick={togglePassVisibility} />
               ) : (
                 <FaEyeSlash onClick={togglePassVisibility} />
               )}
-            </span>
-          </div>
+            </InputGroupAddon>
+          </InputGroup>
+        </div>
+        <div className="generate-pass-div">
+          <span className="generate-text" onClick={toggleGenerateModal}>
+            Generate strong password!
+          </span>
         </div>
         <div className="form-row">
           <label>Note</label>
-          <textarea
-            onChange={handleChange}
-            value={note}
-            type="text"
-            name="note"
-          />
+          <InputGroup>
+            <InputGroupAddon addonType="prepend">
+              <FaStickyNote className="icon" />
+            </InputGroupAddon>
+
+            <Input
+              onChange={handleChange}
+              value={note}
+              type="textarea"
+              name="note"
+              className="input"
+            />
+          </InputGroup>
         </div>
         <div className="button-row">
           <button type="submit" name="submit">
@@ -199,6 +255,12 @@ const Record = () => {
           </button>
         </div>
       </form>
+
+      {/* generate pass modal */}
+      <GenerateModal
+        generateModal={generateModal}
+        toggleGenerateModal={toggleGenerateModal}
+      />
     </div>
   );
 };

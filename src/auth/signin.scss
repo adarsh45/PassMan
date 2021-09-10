@@ -1,0 +1,41 @@
+@import "../index.scss";
+
+.signin-page {
+  width: 50%;
+  margin: auto;
+  text-align: center;
+
+  .welcome-div {
+    height: 100%;
+    margin: auto !important;
+
+    .welcome-text {
+      font-size: 1.2em;
+      text-align: start;
+      color: #fff;
+      .color-green {
+        color: $primary-color;
+      }
+    }
+  }
+
+  .signin-btn {
+    background-color: #171515 !important;
+    border: 1px solid #fff !important;
+    padding: 0.8em !important;
+    svg {
+      margin: 0px 0.2em;
+      font-size: 1.2em;
+    }
+  }
+}
+
+@media only screen and (max-width: 768px) {
+  .signin-page {
+    width: 100% !important;
+
+    .welcome-div {
+      padding: 2em;
+    }
+  }
+}
