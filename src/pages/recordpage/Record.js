@@ -10,7 +10,7 @@ import {
 } from "react-icons/fa";
 import { FiLink2 } from "react-icons/fi";
 import { RiLockPasswordFill } from "react-icons/ri";
-import { Input, InputGroup, InputGroupAddon } from "reactstrap";
+import { Alert, Input, InputGroup, InputGroupAddon } from "reactstrap";
 import "./recordpage.scss";
 import GenerateModal from "./GenerateModal";
 const crypto = require("crypto-js");
@@ -34,6 +34,9 @@ const Record = () => {
       setRecord(location.state);
     }
   }, [location]);
+
+  const [error, setError] = useState("");
+  const [copied, setCopied] = useState(false);
 
   const [record, setRecord] = useState(emptyRecord);
   const [isUpdate, setIsUpdate] = useState(false);
@@ -78,6 +81,10 @@ const Record = () => {
       newPass = bytes.toString(crypto.enc.Utf8);
     }
     navigator.clipboard.writeText(newPass);
+    setCopied(true);
+    setTimeout(() => {
+      setCopied(false);
+    }, 2000);
   };
 
   const handleChange = (e) => {
@@ -96,6 +103,12 @@ const Record = () => {
     e.preventDefault();
 
     // TODO: add empty check for each input
+    if (!title) {
+      return setError("Title cannot be empty!");
+    }
+    if (!pass) {
+      return setError("Password cannot be empty!");
+    }
     let mData, mError, encryptedPass;
     if (pass && pass.length > 6) {
       if (!isEncrypted) {
@@ -108,7 +121,9 @@ const Record = () => {
       } else {
         encryptedPass = pass;
       }
-    } else return;
+    } else {
+      return setError("Password should be at least 6 characters long!");
+    }
     if (isUpdate) {
       const { id } = record;
       if (id) {
@@ -147,6 +162,7 @@ const Record = () => {
       console.log("DATA: ", mData);
       history.goBack();
     } else {
+      setError(mError);
       console.log("ERROR: ", mError);
     }
   };
@@ -159,6 +175,9 @@ const Record = () => {
       <p className="sub-heading">
         {isUpdate ? "Update PassMan Record" : "Add New PassMan Record"}
       </p>
+      {error && <Alert color="danger">{error}</Alert>}
+      {copied && <Alert color="success">Copied to clipboard &#10003;</Alert>}
+
       <form onSubmit={handleSubmit}>
         <div className="form-row">
           <label>Title</label>
