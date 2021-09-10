@@ -29,6 +29,7 @@ const Record = () => {
 
   useEffect(() => {
     if (location.state) {
+      setIsEncrypted(true);
       setIsUpdate(true);
       setRecord(location.state);
     }
@@ -37,6 +38,7 @@ const Record = () => {
   const [record, setRecord] = useState(emptyRecord);
   const [isUpdate, setIsUpdate] = useState(false);
   const [isEncrypted, setIsEncrypted] = useState(false);
+  const [isGenerated, setIsGenerated] = useState(false);
   const [generateModal, setGenerateModal] = useState(false);
   const toggleGenerateModal = () => setGenerateModal(!generateModal);
 
@@ -47,11 +49,13 @@ const Record = () => {
 
   const setPassword = (passd) => {
     setRecord({ ...record, pass: passd });
+    setIsGenerated(true);
   };
 
   useEffect(() => {
     let newPass = "";
-    if (!pass || !isUpdate) return;
+    if (!pass || !isUpdate || isGenerated) return;
+    console.log("I was called");
     if (passVisible) {
       // Decrypt
       const bytes = crypto.AES.decrypt(pass, supabase.auth.user().id);
@@ -65,7 +69,16 @@ const Record = () => {
     setRecord({ ...record, pass: newPass });
   }, [passVisible]);
 
-  const copyToClipboard = () => {};
+  const copyToClipboard = (e) => {
+    e.preventDefault();
+    let newPass = pass;
+    if (isEncrypted && !isGenerated) {
+      // Decrypt
+      const bytes = crypto.AES.decrypt(pass, supabase.auth.user().id);
+      newPass = bytes.toString(crypto.enc.Utf8);
+    }
+    navigator.clipboard.writeText(newPass);
+  };
 
   const handleChange = (e) => {
     const name = e.target.name;
@@ -83,7 +96,6 @@ const Record = () => {
     e.preventDefault();
 
     // TODO: add empty check for each input
-    // TODO: do password encryption here
     let mData, mError, encryptedPass;
     if (pass && pass.length > 6) {
       if (!isEncrypted) {
