@@ -20,6 +20,7 @@ const HomePage = () => {
   }, []);
 
   const readMyRecords = async () => {
+    console.log("READING RECORDS");
     setLoading(true);
     let { data: PassRecords, error } = await supabase
       .from("PassRecord")
@@ -28,7 +29,8 @@ const HomePage = () => {
 
     if (PassRecords && PassRecords.length) {
       setRecords(PassRecords);
-      console.log(PassRecords);
+    } else {
+      setRecords([]);
     }
     if (error) {
       setError(error);

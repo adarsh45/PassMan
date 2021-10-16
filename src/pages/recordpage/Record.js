@@ -175,7 +175,11 @@ const Record = () => {
       <p className="sub-heading">
         {isUpdate ? "Update PassMan Record" : "Add New PassMan Record"}
       </p>
-      {error && <Alert color="danger">{error}</Alert>}
+      {error && (
+        <Alert color="danger">
+          {typeof error === "object" && error.message ? error.message : error}
+        </Alert>
+      )}
       {copied && <Alert color="success">Copied to clipboard &#10003;</Alert>}
 
       <form onSubmit={handleSubmit}>

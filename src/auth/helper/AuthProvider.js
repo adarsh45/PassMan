@@ -1,5 +1,4 @@
 import { useEffect } from "react";
-import { useHistory } from "react-router-dom";
 import { supabase } from "../../client";
 
 const getUserData = (userData) => {
