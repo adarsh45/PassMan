@@ -12,7 +12,6 @@ const HomePage = () => {
   const history = useHistory();
 
   const [records, setRecords] = useState([]);
-  const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -27,14 +26,14 @@ const HomePage = () => {
       .select("*")
       .eq("user_id", supabase.auth.user().id);
 
-    if (PassRecords && PassRecords.length) {
+    if (PassRecords?.length) {
       setRecords(PassRecords);
     } else {
       setRecords([]);
     }
     if (error) {
-      setError(error);
       console.log(error);
+      alert("Something went wrong! Please try again later!");
     }
     setLoading(false);
   };

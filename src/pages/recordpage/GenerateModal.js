@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Modal, ModalBody } from "reactstrap";
 import { FiRefreshCw } from "react-icons/fi";
 import CircleIconButton from "../../components/CircleIconButton";
@@ -11,10 +11,6 @@ const GenerateModal = ({ generateModal, toggleGenerateModal, setPassword }) => {
   const [length, setLength] = useState(10);
   const [isDigits, setIsDigits] = useState(true);
   const [isSymbols, setIsSymbols] = useState(false);
-
-  useEffect(() => {
-    generateThePassword();
-  }, []);
 
   const generateThePassword = () => {
     let password = generator.generate({
@@ -60,7 +56,7 @@ const GenerateModal = ({ generateModal, toggleGenerateModal, setPassword }) => {
                 checked={isDigits}
                 onChange={(e) => setIsDigits(e.target.checked)}
               />
-              <span class="slider round"></span>
+              <span className="slider round"></span>
             </label>
           </div>
           <div className="generate-row">
@@ -71,7 +67,7 @@ const GenerateModal = ({ generateModal, toggleGenerateModal, setPassword }) => {
                 checked={isSymbols}
                 onChange={(e) => setIsSymbols(e.target.checked)}
               />
-              <span class="slider round"></span>
+              <span className="slider round"></span>
             </label>
           </div>
           <div className="buttons-div">
